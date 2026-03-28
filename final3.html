@@ -1,0 +1,822 @@
+Here is the complete HTML document with a fully functional dark/light theme toggle added to your existing MITS portal code.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MITS Gwalior | Student-Centric Portal - Dark/Light Theme</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light Theme (Default) - MITS Official Color Theme */
+    :root {
+      --bg-primary: #f5f7fc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-accent: #f0f4f9;
+      --text-primary: #1e2a3e;
+      --text-secondary: #4a627a;
+      --border-color: #e2e8f0;
+      --mits-blue: #0B2B4F;
+      --mits-blue-dark: #051e36;
+      --mits-orange: #E57200;
+      --mits-orange-dark: #c55f00;
+      --hero-gradient: linear-gradient(135deg, #0B2B4F 0%, #134072 100%);
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      --hover-shadow: 0 20px 30px -12px rgba(11,43,79,0.15);
+      --input-bg: #ffffff;
+    }
+
+    /* Dark Theme */
+    body.dark {
+      --bg-primary: #0a0f1a;
+      --bg-secondary: #141a24;
+      --bg-card: #1a212e;
+      --bg-accent: #0f151f;
+      --text-primary: #e8edf5;
+      --text-secondary: #9aaebf;
+      --border-color: #2a3442;
+      --mits-blue: #2c6288;
+      --mits-blue-dark: #1a4462;
+      --mits-orange: #f0892e;
+      --mits-orange-dark: #d97a1a;
+      --hero-gradient: linear-gradient(135deg, #0a1a2f 0%, #0f2a3a 100%);
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      --hover-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+      --input-bg: #1e2a3a;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Header & Navigation */
+    .navbar {
+      background: var(--bg-secondary);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2px solid var(--mits-orange);
+      transition: background 0.3s ease;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--mits-blue);
+      letter-spacing: -0.3px;
+      transition: color 0.3s;
+    }
+
+    .logo span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--mits-orange);
+      display: block;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--mits-orange);
+    }
+
+    /* Dark Mode Toggle Button */
+    .theme-toggle {
+      background: var(--bg-accent);
+      border: 1px solid var(--border-color);
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--mits-orange);
+      color: white;
+      border-color: var(--mits-orange);
+    }
+
+    .theme-toggle i {
+      font-size: 1rem;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--hero-gradient);
+      padding: 3rem 0 3.5rem;
+      color: white;
+      transition: background 0.3s ease;
+    }
+
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-text {
+      flex: 1.2;
+    }
+
+    .hero-text .badge {
+      background: rgba(229, 114, 0, 0.2);
+      color: #ffb76b;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .hero-text h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 550px;
+      margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+      background: var(--mits-orange);
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.25s;
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--mits-orange-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(229, 114, 0, 0.3);
+    }
+
+    .btn-outline {
+      border: 1.5px solid white;
+      background: transparent;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      color: white;
+      transition: 0.25s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      flex: 0.8;
+      display: flex;
+      gap: 1.2rem;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      padding: 1.5rem;
+      border-radius: 32px;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .stat h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--mits-orange);
+    }
+    .stat p { font-size: 0.85rem; opacity: 0.9; }
+
+    /* Section titles */
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      color: var(--text-primary);
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 70px;
+      height: 3px;
+      background: var(--mits-orange);
+      border-radius: 3px;
+    }
+
+    .about, .departments, .contact {
+      padding: 5rem 0;
+      background: var(--bg-secondary);
+    }
+    .academics, .updates-resources {
+      padding: 5rem 0;
+      background: var(--bg-primary);
+    }
+
+    .about-content {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .about-text { flex: 1; }
+    .about-text p { color: var(--text-secondary); margin-bottom: 1rem; }
+
+    /* Schemes Cards */
+    .schemes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+    }
+    .scheme-card {
+      background: var(--bg-card);
+      padding: 1.8rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
+    }
+    .scheme-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--hover-shadow);
+      border-color: var(--mits-orange);
+    }
+    .scheme-card i {
+      font-size: 2.2rem;
+      color: var(--mits-orange);
+      margin-bottom: 1rem;
+    }
+    .scheme-card h3 { 
+      font-size: 1.3rem; 
+      margin-bottom: 0.5rem; 
+      color: var(--text-primary);
+    }
+    .scheme-card p {
+      color: var(--text-secondary);
+    }
+
+    /* Departments Grid */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.5rem;
+    }
+    .dept-item {
+      background: var(--bg-accent);
+      border-radius: 20px;
+      padding: 1.3rem;
+      text-align: center;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+    .dept-item:hover {
+      background: var(--bg-card);
+      border-color: var(--mits-orange);
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+    .dept-item i { 
+      font-size: 2rem; 
+      margin-bottom: 0.6rem; 
+      color: var(--mits-orange); 
+    }
+    .dept-item h4 { 
+      color: var(--text-primary);
+      margin-bottom: 0.3rem;
+    }
+    .dept-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Two columns */
+    .two-columns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .announce-box, .resources-box {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: 28px;
+      padding: 1.8rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
+    }
+    .announce-list {
+      list-style: none;
+    }
+    .announce-list li {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-primary);
+    }
+    .announce-list li i {
+      color: var(--mits-orange);
+      background: var(--bg-accent);
+      padding: 6px;
+      border-radius: 50%;
+    }
+    .resource-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0.8rem 1rem;
+      background: var(--bg-accent);
+      border-radius: 60px;
+      transition: 0.2s;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+    .resource-link i { 
+      width: 28px; 
+      color: var(--mits-orange); 
+    }
+    .resource-link:hover {
+      background: var(--mits-orange);
+      color: white;
+      transform: translateX(5px);
+    }
+    .resource-link:hover i {
+      color: white;
+    }
+
+    /* Contact */
+    .contact-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+    }
+    .contact-info, .contact-form {
+      flex: 1;
+    }
+    .contact-info p {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-primary);
+    }
+    .contact-form {
+      background: var(--bg-accent);
+      padding: 1.8rem;
+      border-radius: 28px;
+    }
+    .input-group input, .input-group textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      transition: 0.2s;
+    }
+    .input-group input:focus, .input-group textarea:focus {
+      outline: none;
+      border-color: var(--mits-orange);
+    }
+    .btn-submit {
+      background: var(--mits-orange);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-submit:hover { 
+      background: var(--mits-orange-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--mits-blue);
+      color: #cbdbe0;
+      padding: 3rem 0 1.5rem;
+      transition: background 0.3s;
+    }
+    body.dark .footer {
+      background: #0a121f;
+    }
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .footer-col h4 { color: white; margin-bottom: 1rem; }
+    .footer-col a, .footer-col p { 
+      color: #bcc3d4; 
+      text-decoration: none; 
+      display: block; 
+      margin: 0.5rem 0;
+      transition: 0.2s;
+    }
+    .footer-col a:hover { 
+      color: var(--mits-orange); 
+      transform: translateX(3px);
+    }
+    .social-icons i { 
+      font-size: 1.4rem; 
+      margin-right: 1rem; 
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .social-icons i:hover { 
+      color: var(--mits-orange); 
+      transform: translateY(-2px); 
+    }
+    .copyright { 
+      text-align: center; 
+      border-top: 1px solid rgba(255,255,255,0.2); 
+      padding-top: 1.8rem; 
+      font-size: 0.85rem; 
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--mits-orange);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 2000;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--bg-secondary);
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        padding: 1.5rem;
+        box-shadow: 0 20px 20px rgba(0,0,0,0.08);
+        gap: 1rem;
+        z-index: 999;
+      }
+      .nav-links.active { display: flex; }
+      .menu-icon { display: block; }
+      .hero-text h1 { font-size: 2rem; }
+      .nav-wrapper { gap: 1rem; }
+    }
+    @media (max-width: 768px) {
+      .hero-grid { flex-direction: column; }
+      .two-columns { flex-direction: column; }
+      .container { padding: 0 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <h1>MITS Gwalior</h1>
+        <span>Madhav Institute of Technology & Science</span>
+      </div>
+      <div class="nav-wrapper">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#academics">Academics</a></li>
+          <li><a href="#departments">Departments</a></li>
+          <li><a href="#announcements">Updates</a></li>
+          <li><a href="#resources">Resources</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+          <span>Dark Mode</span>
+        </button>
+        <div class="menu-icon" id="menuToggle"><i class="fas fa-bars"></i></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <div class="badge"><i class="fas fa-university"></i> NAAC A++ | Deemed University</div>
+          <h1>Student-Centric <br>Information Hub</h1>
+          <p>Redesigned for clarity — access academic schemes, resources & updates without clutter. Built for MITS students, by design.</p>
+          <div class="cta-buttons">
+            <a href="#academics" class="btn-primary">Explore Schemes <i class="fas fa-arrow-right"></i></a>
+            <a href="#resources" class="btn-outline">Student Resources</a>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><h3>40+</h3><p>UG/PG Programs</p></div>
+          <div class="stat"><h3>12</h3><p>Departments</p></div>
+          <div class="stat"><h3>100%</h3><p>Resource Access</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="container">
+        <h2 class="section-title">About MITS Gwalior</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>Madhav Institute of Technology & Science (MITS), Gwalior, is a premier technical institute declared as Deemed University under distinct category by Ministry of Education, Government of India. With NAAC A++ Grade, MITS is committed to innovation and excellence.</p>
+            <p>Our redesigned portal eliminates scattered navigation — bringing course schemes, department updates, academic calendars, and student resources into a clean, intuitive interface. Every element is crafted for quick understanding and mobile-first usability.</p>
+            <div class="about-stats-mini" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+              <div><i class="fas fa-check-circle" style="color: var(--mits-orange);"></i> 100% Responsive</div>
+              <div><i class="fas fa-moon" style="color: var(--mits-orange);"></i> Dark/Light Mode</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="academics" class="academics">
+      <div class="container">
+        <h2 class="section-title">Academic Schemes & Curriculum</h2>
+        <div class="schemes-grid">
+          <div class="scheme-card"><i class="fas fa-laptop-code"></i><h3>B.Tech Schemes</h3><p>CSE, ME, ECE, Civil — semester-wise structure, credits, electives.</p></div>
+          <div class="scheme-card"><i class="fas fa-microchip"></i><h3>M.Tech Syllabus</h3><p>Specializations, research credits, and project guidelines.</p></div>
+          <div class="scheme-card"><i class="fas fa-flask"></i><h3>Ph.D. Coursework</h3><p>Research methodology, publication tracks, and advanced topics.</p></div>
+          <div class="scheme-card"><i class="fas fa-calendar-alt"></i><h3>Academic Calendar 2025-26</h3><p>Exam schedules, holidays, and registration deadlines.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="departments" class="departments">
+      <div class="container">
+        <h2 class="section-title">Departments</h2>
+        <div class="dept-grid">
+          <div class="dept-item"><i class="fas fa-laptop-code"></i><h4>Computer Science</h4><p>AI, Data Science</p></div>
+          <div class="dept-item"><i class="fas fa-cogs"></i><h4>Mechanical Engg.</h4><p>Design, Thermal</p></div>
+          <div class="dept-item"><i class="fas fa-bolt"></i><h4>Electrical Engg.</h4><p>Power, Electronics</p></div>
+          <div class="dept-item"><i class="fas fa-chart-line"></i><h4>Civil Engg.</h4><p>Structure, Enviro</p></div>
+          <div class="dept-item"><i class="fas fa-dna"></i><h4>Biotechnology</h4><p>Bioinformatics</p></div>
+          <div class="dept-item"><i class="fas fa-chalkboard"></i><h4>Mathematics</h4><p>Applied Maths</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="announcements" class="updates-resources">
+      <div class="container two-columns">
+        <div class="announce-box">
+          <h3 style="font-size: 1.7rem; margin-bottom: 1rem;"><i class="fas fa-bullhorn" style="color: var(--mits-orange);"></i> Announcements & Updates</h3>
+          <ul class="announce-list">
+            <li><i class="fas fa-newspaper"></i> <strong>Recruitment 2026:</strong> Professor, Associate Professor & Sports Officer – apply by April 20</li>
+            <li><i class="fas fa-chalkboard"></i> <strong>International Student Conference (ISCMCTR-2026)</strong> – April 25-27</li>
+            <li><i class="fas fa-trophy"></i> <strong>Smart India Hackathon 2026</strong> – Internal registrations open</li>
+            <li><i class="fas fa-book"></i> <strong>Library Resources:</strong> New Springer & IEEE digital collections added</li>
+          </ul>
+        </div>
+        <div class="resources-box" id="resources">
+          <h3 style="font-size: 1.7rem; margin-bottom: 1rem;"><i class="fas fa-life-ring" style="color: var(--mits-orange);"></i> Student Resource Hub</h3>
+          <div class="resource-links">
+            <a href="#" class="resource-link" onclick="showToast('Exam timetables & forms - Coming soon'); return false;"><i class="fas fa-download"></i> Exam Timetables & Forms</a>
+            <a href="#" class="resource-link" onclick="showToast('Scholarship portal - Coming soon'); return false;"><i class="fas fa-graduation-cap"></i> Scholarship Portal (National/State)</a>
+            <a href="#" class="resource-link" onclick="showToast('Digital library access - Coming soon'); return false;"><i class="fas fa-laptop"></i> Digital Library & e-Resources</a>
+            <a href="#" class="resource-link" onclick="showToast('Training & Placement cell - Coming soon'); return false;"><i class="fas fa-briefcase"></i> Training & Placement Cell</a>
+            <a href="#" class="resource-link" onclick="showToast('LMS portal - Coming soon'); return false;"><i class="fas fa-id-card"></i> LMS / Student Portal Access</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="contact-wrapper">
+          <div class="contact-info">
+            <p><i class="fas fa-map-marker-alt" style="color: var(--mits-orange);"></i> Gola Ka Mandir, Gwalior (M.P.) - 474005, INDIA</p>
+            <p><i class="fas fa-phone-alt" style="color: var(--mits-orange);"></i> +91-751-2409300</p>
+            <p><i class="fas fa-envelope" style="color: var(--mits-orange);"></i> student-support@mitsgwalior.in</p>
+            <p><i class="fas fa-clock" style="color: var(--mits-orange);"></i> Helpline: Mon-Fri 9:30 AM – 5:00 PM</p>
+          </div>
+          <div class="contact-form">
+            <form id="demoContactForm">
+              <div class="input-group"><input type="text" placeholder="Full Name" required></div>
+              <div class="input-group"><input type="email" placeholder="Student Email" required></div>
+              <div class="input-group"><textarea rows="3" placeholder="Query / Feedback about portal"></textarea></div>
+              <button type="submit" class="btn-submit">Send Message <i class="fas fa-paper-plane"></i></button>
+              <p id="formFeedback" style="margin-top: 12px; font-size: 0.85rem;"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>MITS Gwalior</h4>
+          <p>Deemed University | NAAC A++<br>Student-first digital experience</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <a href="#academics">Academic Schemes</a>
+          <a href="#resources">Student Resources</a>
+          <a href="#announcements">Announcements</a>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <div class="social-icons">
+            <i class="fab fa-linkedin" onclick="showToast('LinkedIn page - Coming soon')"></i>
+            <i class="fab fa-instagram" onclick="showToast('Instagram page - Coming soon')"></i>
+            <i class="fab fa-twitter" onclick="showToast('Twitter page - Coming soon')"></i>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2025 MITS Gwalior - Student Centric Portal | Dark/Light Mode | Improved Accessibility
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Toast notification function
+    function showToast(message) {
+      const existingToast = document.querySelector('.toast');
+      if(existingToast) existingToast.remove();
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Dark/Light Mode Toggle with localStorage
+    const themeToggle = document.getElementById('themeToggle');
+    const toggleIcon = themeToggle.querySelector('i');
+    const toggleText = themeToggle.querySelector('span');
+
+    function setTheme(isDark) {
+      if(isDark) {
+        document.body.classList.add('dark');
+        toggleIcon.className = 'fas fa-sun';
+        toggleText.textContent = 'Light Mode';
+        localStorage.setItem('mitsTheme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        toggleIcon.className = 'fas fa-moon';
+        toggleText.textContent = 'Dark Mode';
+        localStorage.setItem('mitsTheme', 'light');
+      }
+    }
+
+    // Check saved preference
+    const savedTheme = localStorage.getItem('mitsTheme');
+    if(savedTheme === 'dark') {
+      setTheme(true);
+    } else {
+      setTheme(false);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.body.classList.contains('dark');
+      setTheme(!isDark);
+      showToast(isDark ? '☀️ Light mode activated' : '🌙 Dark mode activated');
+    });
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    if(menuToggle) {
+      menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+    }
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('active'));
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = this.getAttribute('href');
+        if(target === "#" || target === "") return;
+        const element = document.querySelector(target);
+        if(element) {
+          e.preventDefault();
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+    
+    // Contact form submission
+    const contactForm = document.getElementById('demoContactForm');
+    const feedback = document.getElementById('formFeedback');
+    if(contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        feedback.innerHTML = '<i class="fas fa-check-circle"></i> Thank you! Our support team will reach out soon.';
+        feedback.style.color = '#E57200';
+        contactForm.reset();
+        setTimeout(() => feedback.innerHTML = '', 3500);
+        showToast('✅ Message sent successfully!');
+      });
+    }
+  </script>
+</body>
+</html>
+```
